@@ -1,0 +1,96 @@
+{
+  "documentType": "catverter-committee",
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "updatedAt": "2026-10-24T00:00:00Z",
+  "committee": {
+    "title": {
+      "en": "The Committee",
+      "it": "Il Comitato"
+    },
+    "description": {
+      "en": "The authority that translates incomprehensible human units into units that make immediate sense from a feline point of view.",
+      "it": "L'autorità che traduce le incomprensibili unità di misura umane in unità che abbiano senso immediato dal punto di vista felino."
+    },
+    "statuteTitle": {
+      "en": "Official statute",
+      "it": "Statuto ufficiale"
+    },
+    "statute": {
+      "en": "Under M.E.O.W. Directive 9/9 (Ministry for the Evaluation of Observational Weirdness), the Committee shall ensure that every quantity can be expressed through cat-perceivable equivalents.",
+      "it": "Ai sensi della Direttiva M.I.A.O. 9/9 (Ministero per l'Interpretazione delle Astrazioni Osservative), il Comitato è incaricato di garantire che ogni quantità possa essere espressa mediante equivalenze gattosamente percepibili."
+    }
+  },
+  "members": [
+    {
+      "id": "pigro",
+      "name": "Pigro",
+      "role": {
+        "en": "President of Applied Measurements",
+        "it": "Presidente delle Misure Applicate"
+      },
+      "biography": {
+        "en": "Calls meetings by sitting on the agenda and decides whether a unit deserves official recognition in the catverse.",
+        "it": "Convoca le riunioni sedendosi sull'ordine del giorno e decide se un'unità merita il riconoscimento ufficiale del catverso."
+      },
+      "accentColor": "#F3B13F",
+      "imageUrl": null
+    },
+    {
+      "id": "gino",
+      "name": "Gino",
+      "role": {
+        "en": "Inspector of Suspicious Heat",
+        "it": "Ispettore del calore sospetto"
+      },
+      "biography": {
+        "en": "Certifies that every object declared “hot” has first been tested with an official paw touch and, when required, a spectacular retreat.",
+        "it": "Certifica che ogni oggetto dichiarato “caldo” sia stato preventivamente testato mediante apposito tocco con zampa ed eventuale fuga spettacolare."
+      },
+      "accentColor": "#EBC45C",
+      "imageUrl": null
+    },
+    {
+      "id": "ludovico",
+      "name": "Ludovico",
+      "role": {
+        "en": "Supreme Reviewer of Naps",
+        "it": "Revisore Supremo dei Sonnellini"
+      },
+      "biography": {
+        "en": "Checks units of time against the only reliable clock: whether a nap was short, correct, or interrupted with appropriate cursing.",
+        "it": "Controlla le unità di tempo con l'unico orologio affidabile: se il sonnellino è stato breve, corretto o interrotto con maleducazione."
+      },
+      "accentColor": "#BACD8A",
+      "imageUrl": null
+    },
+    {
+      "id": "agata",
+      "name": "Agata",
+      "role": {
+        "en": "Director of Vertical Ambition",
+        "it": "Direttore dell'Ambizione Verticale"
+      },
+      "biography": {
+        "en": "Evaluates height, distance, and jumping measurements. Human declarations are corrected according to feline climbing standards.",
+        "it": "Valuta tutte le misure di altezza, distanza e salto. Le dichiarazioni umane vengono corrette secondo gli standard felini di arrampicabilità."
+      },
+      "accentColor": "#C9ADEE",
+      "imageUrl": null
+    },
+    {
+      "id": "seat-five",
+      "name": "Seggio Cinque",
+      "role": {
+        "en": "Officer for Air Currents",
+        "it": "Responsabile delle correnti d'aria"
+      },
+      "biography": {
+        "en": "Asks to leave when the door is closed, then declines to leave. Once the door closes again, the cycle resumes.",
+        "it": "Chiede di uscire quando la porta è chiusa, per poi non uscire affatto. Se la porta viene chiusa, il ciclo ricomincia."
+      },
+      "accentColor": "#8CCFE5",
+      "imageUrl": null
+    }
+  ]
+}
