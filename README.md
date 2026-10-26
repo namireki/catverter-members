@@ -17,11 +17,11 @@ The root document must retain its `$schema` reference to
 `schemas/catverter-committee-v1.schema.json`. Catverter rejects documents that
 do not declare their public schema version.
 
-Pull requests and pushes to `main` run the Catverter content validator. For a
-local check from a sibling Catverter checkout:
+Pull requests and pushes to `main` run the repository's dependency-free
+validator. Run the same check locally with:
 
 ```text
-dotnet run --project ../CatverterV2/tools/Catverter.ContentTool -- validate-committee-repository .
+pwsh -NoProfile -File tools/Test-Committee.ps1
 ```
 
 To add portraits, place image files in an `images` directory and set a member's

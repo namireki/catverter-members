@@ -15,19 +15,6 @@ jobs:
       - name: Check out Committee repository
         uses: actions/checkout@v4
 
-      - name: Check out Catverter validator
-        uses: actions/checkout@v4
-        with:
-          repository: namireki/CatverterV2
-          path: .catverter-validator
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: .catverter-validator/global.json
-
       - name: Validate roster
-        run: >-
-          dotnet run
-          --project .catverter-validator/tools/Catverter.ContentTool/Catverter.ContentTool.csproj
-          -- validate-committee-repository "$GITHUB_WORKSPACE"
+        shell: pwsh
+        run: ./tools/Test-Committee.ps1
