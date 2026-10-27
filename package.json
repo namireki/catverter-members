@@ -1,0 +1,16 @@
+{
+  "name": "@namireki/catverter-members",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Canonical standard committee and Patreon member catalogs for Catverter.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "update-hashes": "node tools/update-manifest.mjs",
+    "validate": "node tools/validate.mjs",
+    "test": "node --test",
+    "check": "npm run validate && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

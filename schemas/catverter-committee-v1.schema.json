@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:com.namirekistudio.catverter:schema:committee:v1",
+  "$comment": "Copyright 2026 Namireki Studio. Licensed under Apache-2.0. Deprecated compatibility schema; use the member catalog schemas.",
   "title": "Catverter committee roster v1",
   "type": "object",
   "additionalProperties": false,

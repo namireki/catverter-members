@@ -1,0 +1,33 @@
+{
+  "$schema": "schemas/catverter-member-catalog-manifest-v1.schema.json",
+  "documentType": "catverter-member-catalog-manifest",
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "updatedAt": "2026-10-27T00:00:00Z",
+  "repository": "https://github.com/namireki/catverter-members",
+  "ref": "main",
+  "contentBaseUrlTemplate": "https://raw.githubusercontent.com/namireki/catverter-members/{revision}/",
+  "hashAlgorithm": "sha256",
+  "textHashEncoding": "utf-8-lf",
+  "catalogs": [
+    {
+      "catalogType": "standard-committee",
+      "path": "catalogs/standard-committee.json",
+      "schemaPath": "schemas/catverter-standard-committee-v1.schema.json",
+      "sha256": "6f7fe83f7d5eee4802f20451402f10b1a41a79cb252c4a207f9f6eb4d2f0e47e",
+      "byteLength": 4314
+    },
+    {
+      "catalogType": "patreon",
+      "path": "catalogs/patreon-members.json",
+      "schemaPath": "schemas/catverter-patreon-members-v1.schema.json",
+      "sha256": "8868f548c9dd05beba9544295dd1bdde8084e8b2fb0f7277f48b3dce30fd163c",
+      "byteLength": 597
+    }
+  ],
+  "legacy": {
+    "path": "committee.json",
+    "status": "deprecated",
+    "replacement": "catalogs/standard-committee.json"
+  }
+}

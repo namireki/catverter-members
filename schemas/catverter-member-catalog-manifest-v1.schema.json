@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/namireki/catverter-members/main/schemas/catverter-member-catalog-manifest-v1.schema.json",
+  "$comment": "Copyright 2026 Namireki Studio. Licensed under Apache-2.0.",
+  "title": "Catverter member catalog manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "documentType",
+    "schemaVersion",
+    "version",
+    "updatedAt",
+    "repository",
+    "ref",
+    "contentBaseUrlTemplate",
+    "hashAlgorithm",
+    "textHashEncoding",
+    "catalogs",
+    "legacy"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "schemas/catverter-member-catalog-manifest-v1.schema.json"
+    },
+    "documentType": {
+      "const": "catverter-member-catalog-manifest"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "version": {
+      "$ref": "#/$defs/version"
+    },
+    "updatedAt": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "repository": {
+      "const": "https://github.com/namireki/catverter-members"
+    },
+    "ref": {
+      "const": "main"
+    },
+    "contentBaseUrlTemplate": {
+      "const": "https://raw.githubusercontent.com/namireki/catverter-members/{revision}/"
+    },
+    "hashAlgorithm": {
+      "const": "sha256"
+    },
+    "textHashEncoding": {
+      "const": "utf-8-lf"
+    },
+    "catalogs": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/catalog"
+      }
+    },
+    "legacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "status", "replacement"],
+      "properties": {
+        "path": {
+          "const": "committee.json"
+        },
+        "status": {
+          "const": "deprecated"
+        },
+        "replacement": {
+          "const": "catalogs/standard-committee.json"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "version": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogType",
+        "path",
+        "schemaPath",
+        "sha256",
+        "byteLength"
+      ],
+      "properties": {
+        "catalogType": {
+          "enum": ["standard-committee", "patreon"]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^catalogs/[a-z0-9]+(?:-[a-z0-9]+)*\\.json$"
+        },
+        "schemaPath": {
+          "type": "string",
+          "pattern": "^schemas/[a-z0-9]+(?:-[a-z0-9]+)*\\.schema\\.json$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}
