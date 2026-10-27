@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/catverter-members-catalog-v1.schema.json",
+  "documentType": "catverter-member-catalog",
+  "schemaVersion": 1,
+  "catalogId": "patreon-members",
+  "classification": "patreon-member",
+  "trust": "patreon-consented",
+  "version": "1.0.0",
+  "updatedAt": "2026-10-27T00:00:00Z",
+  "provenance": {
+    "type": "contribution-policy",
+    "documentVersion": "1.0.0",
+    "updatedAt": "2026-10-27T00:00:00Z",
+    "policyPath": "CONTRIBUTING.md"
+  },
+  "members": []
+}

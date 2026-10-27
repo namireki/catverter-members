@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/namireki/catverter-members/main/schemas/catverter-members-manifest-v1.schema.json",
+  "title": "Catverter members manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "documentType",
+    "schemaVersion",
+    "version",
+    "updatedAt",
+    "repository",
+    "revisionPolicy",
+    "jsonNormalization",
+    "hashAlgorithm",
+    "catalogSchema",
+    "catalogs",
+    "migration"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "schemas/catverter-members-manifest-v1.schema.json"
+    },
+    "documentType": {
+      "const": "catverter-members-manifest"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+(?:\\.[0-9]+){1,3}$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "repository": {
+      "const": "namireki/catverter-members"
+    },
+    "revisionPolicy": {
+      "const": "github-main-resolved-to-commit"
+    },
+    "jsonNormalization": {
+      "const": "utf8-lf"
+    },
+    "hashAlgorithm": {
+      "const": "sha256"
+    },
+    "catalogSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "mediaType"
+      ],
+      "properties": {
+        "path": {
+          "const": "schemas/catverter-members-catalog-v1.schema.json"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "mediaType": {
+          "const": "application/schema+json"
+        }
+      }
+    },
+    "catalogs": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/catalogPointer"
+      }
+    },
+    "migration": {
+      "$ref": "#/$defs/migration"
+    }
+  },
+  "$defs": {
+    "catalogPointer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "classification",
+        "trust",
+        "path",
+        "sha256",
+        "mediaType"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "standard-committee",
+            "patreon-members"
+          ]
+        },
+        "classification": {
+          "enum": [
+            "standard-committee",
+            "patreon-member"
+          ]
+        },
+        "trust": {
+          "enum": [
+            "official",
+            "patreon-consented"
+          ]
+        },
+        "path": {
+          "enum": [
+            "catalogs/standard-committee.json",
+            "catalogs/patreon-members.json"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "mediaType": {
+          "const": "application/json"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "standard-committee"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "then": {
+            "properties": {
+              "classification": {
+                "const": "standard-committee"
+              },
+              "trust": {
+                "const": "official"
+              },
+              "path": {
+                "const": "catalogs/standard-committee.json"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "patreon-members"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "then": {
+            "properties": {
+              "classification": {
+                "const": "patreon-member"
+              },
+              "trust": {
+                "const": "patreon-consented"
+              },
+              "path": {
+                "const": "catalogs/patreon-members.json"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "path",
+        "documentVersion",
+        "updatedAt",
+        "sourceLicense"
+      ],
+      "properties": {
+        "repository": {
+          "const": "namireki/CatverterV2"
+        },
+        "commit": {
+          "const": "a028e772b3dfc81e68d588a354c74294be8479be"
+        },
+        "path": {
+          "const": "committee-repository/committee.json"
+        },
+        "documentVersion": {
+          "const": "1.0.0"
+        },
+        "updatedAt": {
+          "const": "2026-10-24T00:00:00Z"
+        },
+        "sourceLicense": {
+          "const": "Apache-2.0"
+        }
+      }
+    }
+  }
+}

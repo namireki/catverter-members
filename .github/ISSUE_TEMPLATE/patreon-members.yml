@@ -1,0 +1,67 @@
+name: Propose a Patreon member
+description: Request review of a consented public Patreon member entry.
+title: "[Patreon member] "
+labels:
+  - patreon-member
+  - member-catalog
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form starts a review; it does not publish a member automatically.
+        Provide only public catalog data. Do not attach private contact details,
+        identity documents, payment data, or sensitive evidence.
+  - type: input
+    id: cat-name
+    attributes:
+      label: Cat name
+      description: The public cat name to display.
+    validations:
+      required: true
+  - type: textarea
+    id: committee-position
+    attributes:
+      label: Committee position
+      description: Provide the public position in English and optional translations.
+      placeholder: |
+        English: ...
+        Italian (optional): ...
+    validations:
+      required: true
+  - type: textarea
+    id: short-description
+    attributes:
+      label: Short description (optional)
+      description: Optional public description in English and optional translations.
+    validations:
+      required: false
+  - type: textarea
+    id: photo
+    attributes:
+      label: Photo (optional)
+      description: Attach a public photo only if photo consent is granted below.
+    validations:
+      required: false
+  - type: checkboxes
+    id: public-consent
+    attributes:
+      label: Public display consent
+      options:
+        - label: I have consent to publish the cat name, committee position, and optional description in the public catalog and consumer caches.
+          required: true
+  - type: checkboxes
+    id: photo-consent
+    attributes:
+      label: Photo consent
+      options:
+        - label: No photo is being submitted.
+          required: false
+        - label: If a photo is submitted, I have permission to publish it publicly and to record its raw hash, length, media type, and rights metadata.
+          required: false
+  - type: textarea
+    id: rights
+    attributes:
+      label: Photo rights (optional unless a photo is submitted)
+      description: State the copyright holder and license or permission reference. Do not include private or sensitive evidence.
+    validations:
+      required: false

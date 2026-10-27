@@ -1,0 +1,42 @@
+{
+  "$schema": "schemas/catverter-members-manifest-v1.schema.json",
+  "documentType": "catverter-members-manifest",
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "updatedAt": "2026-10-27T00:00:00Z",
+  "repository": "namireki/catverter-members",
+  "revisionPolicy": "github-main-resolved-to-commit",
+  "jsonNormalization": "utf8-lf",
+  "hashAlgorithm": "sha256",
+  "catalogSchema": {
+    "path": "schemas/catverter-members-catalog-v1.schema.json",
+    "sha256": "85668810eb50eda10318188d8e168c860cabdd5c4759bbcd714e8c78c6add182",
+    "mediaType": "application/schema+json"
+  },
+  "catalogs": [
+    {
+      "id": "standard-committee",
+      "classification": "standard-committee",
+      "trust": "official",
+      "path": "catalogs/standard-committee.json",
+      "sha256": "661164b0aea8e9cea95332d19cd908a59c363f8d091f2a12a44dcce9ba307df9",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "patreon-members",
+      "classification": "patreon-member",
+      "trust": "patreon-consented",
+      "path": "catalogs/patreon-members.json",
+      "sha256": "513c882043860c3cb4b8032a4fe24890fb19e7ff071390f3883fecb3a6f7e7b2",
+      "mediaType": "application/json"
+    }
+  ],
+  "migration": {
+    "repository": "namireki/CatverterV2",
+    "commit": "a028e772b3dfc81e68d588a354c74294be8479be",
+    "path": "committee-repository/committee.json",
+    "documentVersion": "1.0.0",
+    "updatedAt": "2026-10-24T00:00:00Z",
+    "sourceLicense": "Apache-2.0"
+  }
+}

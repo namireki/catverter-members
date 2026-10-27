@@ -1,4 +1,4 @@
-name: Validate Committee roster
+name: Validate members catalogs
 
 on:
   pull_request:
@@ -12,9 +12,13 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out Committee repository
+      - name: Check out members repository
         uses: actions/checkout@v4
 
-      - name: Validate roster
+      - name: Validate manifest and catalogs
         shell: pwsh
-        run: ./tools/Test-Committee.ps1
+        run: ./tools/Test-CatverterMembers.ps1
+
+      - name: Run regression tests
+        shell: pwsh
+        run: ./tests/Test-Validator.ps1
