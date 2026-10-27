@@ -85,8 +85,8 @@ function licensedPhoto(id) {
   };
 }
 
-function patreonMember(id, photo = null) {
-  return {
+function patreonMember(id, photo = null, premiumSortOrder) {
+  const member = {
     id,
     memberType: 'patreon',
     catName: 'Miso',
@@ -98,6 +98,57 @@ function patreonMember(id, photo = null) {
     },
     photo
   };
+  if (premiumSortOrder !== undefined) {
+    member.premiumSortOrder = premiumSortOrder;
+  }
+  return member;
+}
+
+function writePatreonWithRawPremiumSortOrder(
+  root,
+  rawValue,
+  { duplicate = false } = {}
+) {
+  const patreon = readJson(root, 'catalogs/patreon-members.json');
+  patreon.members.push(patreonMember('miso', null, 1));
+  const marker = '"premiumSortOrder": 1';
+  const replacement = duplicate
+    ? `${marker},\n      "premiumSortOrder": ${rawValue}`
+    : `"premiumSortOrder": ${rawValue}`;
+  const text = `${JSON.stringify(patreon, null, 2)}\n`;
+  assert(text.includes(marker));
+  writeFileSync(
+    path.join(root, 'catalogs/patreon-members.json'),
+    text.replace(marker, replacement),
+    'utf8'
+  );
+  refreshManifest(root);
+}
+
+function groupPatreonMembersForConsumer(members) {
+  const premiumGroups = new Map();
+  const defaultMembers = [];
+  for (const member of members) {
+    if (!Object.hasOwn(member, 'premiumSortOrder')) {
+      defaultMembers.push(member);
+      continue;
+    }
+    const group = premiumGroups.get(member.premiumSortOrder) ?? [];
+    group.push(member);
+    premiumGroups.set(member.premiumSortOrder, group);
+  }
+  return [
+    ...[...premiumGroups.entries()]
+      .sort(([left], [right]) => left - right)
+      .map(([premiumSortOrder, groupMembers]) => ({
+        premiumSortOrder,
+        members: groupMembers
+      })),
+    {
+      premiumSortOrder: null,
+      members: defaultMembers
+    }
+  ];
 }
 
 test('canonical repository validates with expected counts', () => {
@@ -120,6 +171,28 @@ test('test-only Patreon UI fixture injects exactly 20 valid members', () => {
     assert(fixture.members.every((member) =>
       member.id.startsWith('test-patreon-')
     ));
+    const consumerGroups = groupPatreonMembersForConsumer(fixture.members);
+    assert.deepEqual(
+      consumerGroups.map((group) => group.premiumSortOrder),
+      [0, 10, null]
+    );
+    assert.deepEqual(
+      consumerGroups[0].members.map((member) => member.id).sort(),
+      ['test-patreon-pip', 'test-patreon-pixel']
+    );
+    assert.deepEqual(
+      consumerGroups[1].members.map((member) => member.id),
+      ['test-patreon-maximum-whiskers']
+    );
+    assert.equal(consumerGroups[2].members.length, 17);
+    assert(consumerGroups.slice(0, -1).every((group) =>
+      group.members.every((member) =>
+        Object.hasOwn(member, 'premiumSortOrder')
+      )
+    ));
+    assert(consumerGroups.at(-1).members.every((member) =>
+      !Object.hasOwn(member, 'premiumSortOrder')
+    ));
 
     const manifest = readJson(root, 'catalog.json');
     assert.equal(
@@ -140,6 +213,100 @@ test('test-only Patreon UI fixture injects exactly 20 valid members', () => {
       patreon: 20,
       photos: 0
     });
+  });
+});
+
+test('schemas expose premium ordering only for Patreon members', () => {
+  const patreonSchema = readJson(
+    repositoryRoot,
+    'schemas/catverter-patreon-members-v1.schema.json'
+  );
+  assert.deepEqual(
+    patreonSchema.$defs.member.properties.premiumSortOrder,
+    {
+      type: 'integer',
+      minimum: 0,
+      maximum: 2147483647
+    }
+  );
+  assert.equal(
+    patreonSchema.$defs.member.required.includes('premiumSortOrder'),
+    false
+  );
+
+  const standardSchema = readJson(
+    repositoryRoot,
+    'schemas/catverter-standard-committee-v1.schema.json'
+  );
+  assert.equal(standardSchema.$defs.member.additionalProperties, false);
+  assert.equal(
+    Object.hasOwn(
+      standardSchema.$defs.member.properties,
+      'premiumSortOrder'
+    ),
+    false
+  );
+});
+
+test('premiumSortOrder accepts missing, zero, and signed 32-bit maximum', () => {
+  withFixture((root) => {
+    const patreon = readJson(root, 'catalogs/patreon-members.json');
+    patreon.members.push(
+      patreonMember('default-miso'),
+      patreonMember('premium-zero', null, 0),
+      patreonMember('premium-max', null, 2147483647)
+    );
+    writeJson(root, 'catalogs/patreon-members.json', patreon);
+    refreshManifest(root);
+
+    assert.deepEqual(validateRepository(root).errors, []);
+  });
+});
+
+for (const [label, rawValue] of [
+  ['negative values', '-1'],
+  ['fractions', '1.5'],
+  ['decimal integer spellings', '1.0'],
+  ['exponent spellings', '1e0'],
+  ['strings', '"1"'],
+  ['null', 'null'],
+  ['booleans', 'true'],
+  ['signed 32-bit overflow', '2147483648']
+]) {
+  test(`premiumSortOrder rejects ${label}`, () => {
+    withFixture((root) => {
+      writePatreonWithRawPremiumSortOrder(root, rawValue);
+
+      const result = validateRepository(root);
+      assert(result.errors.some((error) =>
+        error.includes('.premiumSortOrder:')
+      ));
+    });
+  });
+}
+
+test('duplicate premiumSortOrder keys are rejected before JSON parsing can hide them', () => {
+  withFixture((root) => {
+    writePatreonWithRawPremiumSortOrder(root, '2', { duplicate: true });
+
+    const result = validateRepository(root);
+    assert(result.errors.some((error) =>
+      error.includes("duplicate property 'premiumSortOrder'")
+    ));
+  });
+});
+
+test('standard committee members reject premiumSortOrder', () => {
+  withFixture((root) => {
+    const standard = readJson(root, 'catalogs/standard-committee.json');
+    standard.members[0].premiumSortOrder = 0;
+    writeJson(root, 'catalogs/standard-committee.json', standard);
+    refreshManifest(root);
+
+    const result = validateRepository(root);
+    assert(result.errors.some((error) =>
+      error.includes("unknown property 'premiumSortOrder'")
+    ));
   });
 });
 

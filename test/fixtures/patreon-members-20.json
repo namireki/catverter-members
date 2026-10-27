@@ -6,6 +6,7 @@
     {
       "id": "test-patreon-pip",
       "memberType": "patreon",
+      "premiumSortOrder": 0,
       "catName": "Pip",
       "position": {
         "en": "Junior Cardboard Quality Observer"
@@ -126,6 +127,7 @@
     {
       "id": "test-patreon-pixel",
       "memberType": "patreon",
+      "premiumSortOrder": 0,
       "catName": "Pixel",
       "position": {
         "en": "Cursor Pursuit Specialist"
@@ -231,6 +233,7 @@
     {
       "id": "test-patreon-maximum-whiskers",
       "memberType": "patreon",
+      "premiumSortOrder": 10,
       "catName": "Maximum Whiskers Prime",
       "position": {
         "en": "Chief Coordinator of Multi-Room Zoomies and Cross-Departmental Furniture Navigation"
