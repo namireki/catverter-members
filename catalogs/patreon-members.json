@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/catverter-patreon-members-v1.schema.json",
+  "documentType": "catverter-member-catalog",
+  "schemaVersion": 1,
+  "catalogType": "patreon",
+  "trust": "member-submitted",
+  "version": "1.0.0",
+  "updatedAt": "2026-10-27T00:00:00Z",
+  "license": "Apache-2.0",
+  "copyright": "Copyright 2026 Namireki Studio",
+  "title": {
+    "en": "Patreon Committee Members",
+    "it": "Membri Patreon del Comitato"
+  },
+  "description": {
+    "en": "Cats whose humans support Catverter on Patreon.",
+    "it": "Gatti i cui umani sostengono Catverter su Patreon."
+  },
+  "members": []
+}
