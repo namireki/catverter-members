@@ -19,6 +19,7 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..'
 );
+const patreonFixturePath = 'test/fixtures/patreon-members-20.json';
 const pngBytes = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Z6h8AAAAASUVORK5CYII=',
   'base64'
@@ -106,6 +107,39 @@ test('canonical repository validates with expected counts', () => {
     standard: 5,
     patreon: 0,
     photos: 0
+  });
+});
+
+test('test-only Patreon UI fixture injects exactly 20 valid members', () => {
+  withFixture((root) => {
+    const fixture = readJson(root, patreonFixturePath);
+    assert.equal(fixture.fixtureType, 'catverter-patreon-members-test-only');
+    assert.equal(fixture.testingOnly, true);
+    assert.equal(fixture.publicManifestIncluded, false);
+    assert.equal(fixture.members.length, 20);
+    assert(fixture.members.every((member) =>
+      member.id.startsWith('test-patreon-')
+    ));
+
+    const manifest = readJson(root, 'catalog.json');
+    assert.equal(
+      manifest.catalogs.some((catalog) => catalog.path === patreonFixturePath),
+      false
+    );
+
+    const patreon = readJson(root, 'catalogs/patreon-members.json');
+    assert.deepEqual(patreon.members, []);
+    patreon.members.push(...fixture.members);
+    writeJson(root, 'catalogs/patreon-members.json', patreon);
+    refreshManifest(root);
+
+    const result = validateRepository(root);
+    assert.deepEqual(result.errors, []);
+    assert.deepEqual(result.counts, {
+      standard: 5,
+      patreon: 20,
+      photos: 0
+    });
   });
 });
 
