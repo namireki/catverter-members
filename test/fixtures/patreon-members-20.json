@@ -1,0 +1,244 @@
+{
+  "fixtureType": "catverter-patreon-members-test-only",
+  "testingOnly": true,
+  "publicManifestIncluded": false,
+  "members": [
+    {
+      "id": "test-patreon-pip",
+      "memberType": "patreon",
+      "catName": "Pip",
+      "position": {
+        "en": "Junior Cardboard Quality Observer"
+      },
+      "description": {
+        "en": "Performs rapid occupancy tests on boxes that appear even slightly too small."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-marmalade",
+      "memberType": "patreon",
+      "catName": "Marmalade Von Whiskerworth",
+      "position": {
+        "en": "Deputy Commissioner for Breakfast Scheduling and Emergency Second Breakfasts",
+        "it": "Vicecommissaria per la programmazione della colazione e delle seconde colazioni di emergenza"
+      },
+      "description": {
+        "en": "Maintains a detailed schedule proving that every minute is an acceptable time to request breakfast.",
+        "it": "Mantiene un programma dettagliato che dimostra come ogni minuto sia adatto per chiedere la colazione."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-bo",
+      "memberType": "patreon",
+      "catName": "Bo",
+      "position": {
+        "en": "Sock Auditor"
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-nebula-bean",
+      "memberType": "patreon",
+      "catName": "Captain Nebula Bean",
+      "position": {
+        "en": "Commander of Midnight Hallway Expeditions"
+      },
+      "description": {
+        "en": "Leads high-speed missions through dark corridors and reports every unexplained reflection."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-tiramisu",
+      "memberType": "patreon",
+      "catName": "Tiramisu",
+      "position": {
+        "en": "Senior Cushion Compression Analyst",
+        "it": "Analista senior della compressione dei cuscini"
+      },
+      "description": {
+        "en": "Measures softness by applying one carefully calibrated loaf.",
+        "it": "Misura la morbidezza applicando una pagnotta felina accuratamente calibrata."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-pounce-a-lot",
+      "memberType": "patreon",
+      "catName": "Professor Pounce-a-Lot",
+      "position": {
+        "en": "Visiting Scholar of Unexpected Ankle Encounters"
+      },
+      "description": {
+        "en": "Studies the precise moment a passing human becomes a suitable target for peer-reviewed pouncing."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-mochi",
+      "memberType": "patreon",
+      "catName": "Mochi",
+      "position": {
+        "en": "Assistant Sunbeam Cartographer"
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-duchess",
+      "memberType": "patreon",
+      "catName": "The Honorable Duchess of Sunbeam Terrace",
+      "position": {
+        "en": "Permanent Representative for Warm Floors, Quiet Rooms, and Uninterrupted Afternoon Naps"
+      },
+      "description": {
+        "en": "Negotiates exclusive access to the warmest rectangle of light and records all unauthorized shadow crossings."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-zuzu",
+      "memberType": "patreon",
+      "catName": "Zuzu",
+      "position": {
+        "en": "Ribbon Safety Inspector"
+      },
+      "description": {
+        "en": "Confirms that every ribbon can be chased from at least three dramatic angles."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-biscotto",
+      "memberType": "patreon",
+      "catName": "Biscotto",
+      "position": {
+        "en": "Keeper of the Forbidden Kitchen Counter",
+        "it": "Custode del piano cucina proibito"
+      },
+      "description": {
+        "en": "Documents restricted surfaces by sitting on them whenever supervision is unavailable.",
+        "it": "Documenta le superfici vietate sedendosi sopra quando nessuno sta controllando."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-pixel",
+      "memberType": "patreon",
+      "catName": "Pixel",
+      "position": {
+        "en": "Cursor Pursuit Specialist"
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-fluffington",
+      "memberType": "patreon",
+      "catName": "Sir Fluffington the Third",
+      "position": {
+        "en": "Royal Examiner of Blankets, Duvets, Throws, and Other Approved Burrowing Materials"
+      },
+      "description": {
+        "en": "Issues ceremonial approval after disappearing beneath each textile for an appropriately mysterious interval."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-nox",
+      "memberType": "patreon",
+      "catName": "Nox",
+      "position": {
+        "en": "Night Shift Window Monitor"
+      },
+      "description": {
+        "en": "Tracks moth traffic and files urgent reports about leaves behaving suspiciously."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-lady-meowington",
+      "memberType": "patreon",
+      "catName": "Lady Meowington of the Extremely Narrow Windowsill",
+      "position": {
+        "en": "Principal Investigator for Balancing Decisions That Concern Everyone in the Immediate Area"
+      },
+      "description": {
+        "en": "Demonstrates that comfort and available surface area are unrelated concepts."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-peanut",
+      "memberType": "patreon",
+      "catName": "Peanut",
+      "position": {
+        "en": "Deputy Doorway Occupant",
+        "it": "Viceoccupante delle porte"
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-galileo",
+      "memberType": "patreon",
+      "catName": "Galileo Purrlilei",
+      "position": {
+        "en": "Director of Falling Object Experiments"
+      },
+      "description": {
+        "en": "Tests gravity by moving pens, bottle caps, and carefully selected keepsakes beyond the edge of the table."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-fizz",
+      "memberType": "patreon",
+      "catName": "Fizz",
+      "position": {
+        "en": "Carbonation Noise Reviewer"
+      },
+      "description": {
+        "en": "Evaluates opening sounds from a safe distance and returns only after the bubbles have been contained."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-zampetta",
+      "memberType": "patreon",
+      "catName": "Contessa Zampetta",
+      "position": {
+        "en": "Minister for Elegant Entrances and Immediate Reconsideration",
+        "it": "Ministra degli ingressi eleganti e dei ripensamenti immediati"
+      },
+      "description": {
+        "en": "Requests that doors open, pauses on the threshold, and carefully reviews every available option.",
+        "it": "Chiede che le porte si aprano, si ferma sulla soglia e valuta con cura ogni opzione disponibile."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-waffle",
+      "memberType": "patreon",
+      "catName": "Waffle",
+      "position": {
+        "en": "Laundry Basket Resident"
+      },
+      "description": {
+        "en": "Provides continuous occupancy while clean laundry waits for an alternative storage strategy."
+      },
+      "photo": null
+    },
+    {
+      "id": "test-patreon-maximum-whiskers",
+      "memberType": "patreon",
+      "catName": "Maximum Whiskers Prime",
+      "position": {
+        "en": "Chief Coordinator of Multi-Room Zoomies and Cross-Departmental Furniture Navigation"
+      },
+      "description": {
+        "en": "Coordinates sudden sprints across the full household while maintaining zero written records and maximum operational volume."
+      },
+      "photo": null
+    }
+  ]
+}

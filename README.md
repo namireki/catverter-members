@@ -87,6 +87,16 @@ The catalog is intentionally empty until real members submit entries. Do not
 invent placeholder members. Copy `templates/patreon-member.template.json` when
 adding a real entry and follow [CONTRIBUTING.md](CONTRIBUTING.md).
 
+### Test-only Patreon UI fixture
+
+`test/fixtures/patreon-members-20.json` contains exactly 20 invented Patreon
+member records for Catverter UI and regression testing. It is test-only data,
+is not a canonical catalog, is not referenced by `catalog.json`, and must never
+be included in a public consumer snapshot. The regression suite injects its
+records into a temporary copy of `catalogs/patreon-members.json` and runs the
+real repository validator; the canonical Patreon catalog remains empty until
+real consented members exist.
+
 ## Validation
 
 Node.js 20 or newer is required. The validator has no runtime dependencies.
@@ -98,8 +108,9 @@ npm run check
 
 `npm run check` validates the catalogs, schemas, manifest hashes, global IDs,
 legacy projection, photo bytes, consent/rights records, orphaned files, and
-templates, then runs the negative and positive test suite. Pull requests and
-pushes to `main` run the same command in GitHub Actions. The historical
+templates, then runs the negative and positive test suite, including validation
+of all 20 injected test-only Patreon records. Pull requests and pushes to `main`
+run the same command in GitHub Actions. The historical
 `pwsh -NoProfile -File tools/Test-Committee.ps1` command remains as a wrapper
 around the canonical Node validator.
 
