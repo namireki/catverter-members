@@ -103,6 +103,11 @@
         "memberType": {
           "const": "patreon"
         },
+        "premiumSortOrder": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
         "catName": {
           "type": "string",
           "minLength": 1,

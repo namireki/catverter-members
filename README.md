@@ -33,8 +33,10 @@ Use this sequence:
    byte length from the manifest before parsing.
 6. Validate closed object shapes, document identity, dotted versions,
    timestamps, localized text, explicit catalog/member classification, and
-   globally unique IDs. A Patreon ID that matches a standard ID invalidates the
-   snapshot; Patreon data can never replace an official member.
+   globally unique IDs. If present on a Patreon member, `premiumSortOrder` must
+   be a canonical JSON integer token in the inclusive range `0..2147483647`.
+   A Patreon ID that matches a standard ID invalidates the snapshot; Patreon
+   data can never replace an official member.
 7. Resolve photo paths against
    `https://raw.githubusercontent.com/namireki/catverter-members/{sha}/`, then
    verify the raw-byte SHA-256, byte length, declared media type, magic bytes,
@@ -47,6 +49,13 @@ valid remote or cached snapshot exists, show that bundled standard committee
 without remote Patreon members. Valid Patreon entries are displayed
 automatically and must be visually distinguishable using the explicit
 `memberType: "patreon"` classification, not a path, position, or display name.
+
+Consumers classify a Patreon member as premium only when
+`premiumSortOrder` is present. Premium members display a gold star and are
+grouped by ascending `premiumSortOrder`; every premium group appears before
+members without the field. Consumers deterministically randomize members
+sharing the same order among themselves. Patreon members without the field
+remain in the consumer's randomized default order.
 
 The mutable human-readable discovery URLs are:
 
@@ -78,14 +87,22 @@ Every Patreon member has:
 
 - a permanent globally unique lowercase ASCII `id`;
 - `memberType: "patreon"`;
+- an optional `premiumSortOrder` canonical JSON integer from `0` through
+  `2147483647`, whose presence marks the member as premium;
 - a `catName`;
 - a localized committee `position` with non-empty English;
 - an optional localized short `description` of at most 280 characters; and
 - an explicit `photo`, either `null` or repository-hosted integrity metadata.
 
+The JSON Schema enforces the integer value and range. The dependency-free
+repository validator additionally enforces the source token spelling
+`0|[1-9][0-9]*`, so decimal and exponent spellings such as `1.0` and `1e0`
+are rejected even though they represent integral JSON numbers.
+
 The catalog is intentionally empty until real members submit entries. Do not
-invent placeholder members. Copy `templates/patreon-member.template.json` when
-adding a real entry and follow [CONTRIBUTING.md](CONTRIBUTING.md).
+invent placeholder members. Copy `templates/patreon-member.template.json` for
+a default member or `templates/premium-patreon-member.template.json` for a
+premium member, then follow [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Test-only Patreon UI fixture
 
@@ -96,6 +113,11 @@ be included in a public consumer snapshot. The regression suite injects its
 records into a temporary copy of `catalogs/patreon-members.json` and runs the
 real repository validator; the canonical Patreon catalog remains empty until
 real consented members exist.
+
+The fixture's premium examples are `test-patreon-pip` and
+`test-patreon-pixel` at order `0`, plus
+`test-patreon-maximum-whiskers` at order `10`. The shared order exercises
+tie randomization, while order `10` exercises a later premium tier.
 
 ## Validation
 

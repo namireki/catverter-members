@@ -6,21 +6,32 @@ licensed under Apache-2.0.
 ## Add or update a Patreon member
 
 1. Copy `templates/patreon-member.template.json` into the `members` array in
-   `catalogs/patreon-members.json`.
+   `catalogs/patreon-members.json`. For a premium member, use
+   `templates/premium-patreon-member.template.json` instead.
 2. Replace the example with the member's real data. IDs use lowercase ASCII
    words separated by single hyphens, are globally unique across both
    catalogs, and are never reassigned after removal.
 3. Keep `memberType` equal to `patreon`. English is required in every localized
    field; additional keys must be canonical BCP 47 language tags.
 4. Remove `description` when none was supplied. Do not publish invented text.
-5. Keep `photo` equal to `null` unless all photo requirements below are met.
-6. Increment the Patreon catalog's three-component `version` and set
+5. Omit `premiumSortOrder` for a default Patreon member. For a premium member,
+   set it to a canonical JSON integer from `0` through `2147483647`, written
+   as `0` or a non-zero digit followed by digits. Negative values, fractions,
+   decimal or exponent spellings such as `1.0` or `1e0`, strings, booleans,
+   null, and values above `2147483647` are rejected.
+6. Keep `photo` equal to `null` unless all photo requirements below are met.
+7. Increment the Patreon catalog's three-component `version` and set
    `updatedAt` to a real UTC timestamp in `YYYY-MM-DDTHH:mm:ssZ` form.
-7. Run `npm run update-hashes` and `npm run check`.
+8. Run `npm run update-hashes` and `npm run check`.
 
 Patreon entries are additive. They cannot modify, shadow, or replace a standard
 committee member. Standard committee changes require maintainer approval and
 must keep the deprecated `committee.json` projection synchronized.
+
+Consumers show premium members with a gold star. They group premium members by
+ascending `premiumSortOrder`, place every premium group before members without
+the field, deterministically randomize ties within each premium order, and keep
+default Patreon members in their randomized order.
 
 ## Add or replace a photo
 

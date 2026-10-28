@@ -19,6 +19,8 @@ const PERMISSION_PATH_PATTERN =
   /^permissions\/[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
 const SPDX_PATTERN = /^[A-Za-z0-9][A-Za-z0-9.+-]*$/;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const MAX_PREMIUM_SORT_ORDER = 2147483647;
+const CANONICAL_NON_NEGATIVE_INTEGER_PATTERN = /^(?:0|[1-9]\d*)$/;
 const COPYRIGHT = 'Copyright 2026 Namireki Studio';
 const LICENSE = 'Apache-2.0';
 
@@ -53,6 +55,137 @@ function isObject(value) {
 
 function normalizeLf(value) {
   return value.replace(/\r\n?/g, '\n');
+}
+
+function inspectJsonLexicalRules(
+  text,
+  owner,
+  errors,
+  { canonicalIntegerProperties = [] } = {}
+) {
+  const canonicalIntegerKeys = new Set(canonicalIntegerProperties);
+  let index = 0;
+
+  const skipWhitespace = () => {
+    while (index < text.length && /[\t\n\r ]/.test(text[index])) {
+      index += 1;
+    }
+  };
+
+  const readString = () => {
+    const start = index;
+    index += 1;
+    while (index < text.length) {
+      const character = text[index];
+      if (character === '"') {
+        index += 1;
+        return JSON.parse(text.slice(start, index));
+      }
+      if (character === '\\') {
+        index += 1;
+        index += text[index] === 'u' ? 5 : 1;
+      } else {
+        index += 1;
+      }
+    }
+    return '';
+  };
+
+  const readNumber = () => {
+    const match = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/
+      .exec(text.slice(index));
+    index += match[0].length;
+  };
+
+  const readValue = (pathSuffix) => {
+    skipWhitespace();
+    const character = text[index];
+    if (character === '{') {
+      readObject(pathSuffix);
+    } else if (character === '[') {
+      readArray(pathSuffix);
+    } else if (character === '"') {
+      readString();
+    } else if (character === '-' || /\d/.test(character)) {
+      readNumber();
+    } else if (text.startsWith('true', index)) {
+      index += 4;
+    } else if (text.startsWith('false', index)) {
+      index += 5;
+    } else {
+      index += 4;
+    }
+  };
+
+  const readArray = (pathSuffix) => {
+    index += 1;
+    skipWhitespace();
+    if (text[index] === ']') {
+      index += 1;
+      return;
+    }
+    let itemIndex = 0;
+    while (index < text.length) {
+      readValue(`${pathSuffix}[${itemIndex}]`);
+      skipWhitespace();
+      if (text[index] === ']') {
+        index += 1;
+        return;
+      }
+      index += 1;
+      itemIndex += 1;
+    }
+  };
+
+  const readObject = (pathSuffix) => {
+    index += 1;
+    skipWhitespace();
+    if (text[index] === '}') {
+      index += 1;
+      return;
+    }
+    const keys = new Set();
+    while (index < text.length) {
+      const key = readString();
+      const objectOwner = pathSuffix.length === 0
+        ? owner
+        : `${owner}${pathSuffix}`;
+      if (keys.has(key)) {
+        errors.push(`${objectOwner}: duplicate property '${key}'`);
+      }
+      keys.add(key);
+
+      skipWhitespace();
+      index += 1;
+      skipWhitespace();
+      const valueStart = index;
+      readValue(`${pathSuffix}.${key}`);
+      const valueEnd = index;
+
+      if (canonicalIntegerKeys.has(key)) {
+        const token = text.slice(valueStart, valueEnd);
+        const isCanonical = CANONICAL_NON_NEGATIVE_INTEGER_PATTERN.test(token);
+        const isInRange = isCanonical &&
+          BigInt(token) <= BigInt(MAX_PREMIUM_SORT_ORDER);
+        if (!isInRange) {
+          errors.push(
+            `${owner}${pathSuffix}.${key}: must use canonical JSON integer ` +
+            `spelling 0 or [1-9][0-9]* in range 0..${MAX_PREMIUM_SORT_ORDER}`
+          );
+        }
+      }
+
+      skipWhitespace();
+      if (text[index] === '}') {
+        index += 1;
+        return;
+      }
+      index += 1;
+      skipWhitespace();
+    }
+  };
+
+  readValue('');
 }
 
 function sha256(value) {
@@ -141,7 +274,7 @@ function readUtf8(root, relativePath, errors) {
   }
 }
 
-function readJson(root, relativePath, errors) {
+function readJson(root, relativePath, errors, options) {
   const file = readUtf8(root, relativePath, errors);
   if (file === null) {
     return null;
@@ -149,6 +282,7 @@ function readJson(root, relativePath, errors) {
 
   try {
     const value = JSON.parse(file.text);
+    inspectJsonLexicalRules(file.text, relativePath, errors, options);
     if (!isObject(value)) {
       errors.push(`${relativePath}: root must be an object`);
       return null;
@@ -223,6 +357,16 @@ function validateLocalized(value, owner, errors, maximumLength) {
 function validateId(value, owner, errors) {
   if (typeof value !== 'string' || !ID_PATTERN.test(value)) {
     errors.push(`${owner}: must be a canonical lowercase ASCII ID`);
+  }
+}
+
+function validatePremiumSortOrder(value, owner, errors) {
+  if (!Number.isInteger(value) ||
+      value < 0 ||
+      value > MAX_PREMIUM_SORT_ORDER) {
+    errors.push(
+      `${owner}: must be an integer in range 0..${MAX_PREMIUM_SORT_ORDER}`
+    );
   }
 }
 
@@ -486,7 +630,7 @@ function validatePatreonMember(
   if (!exactKeys(
     member,
     ['id', 'memberType', 'catName', 'position', 'photo'],
-    ['description'],
+    ['premiumSortOrder', 'description'],
     owner,
     errors
   )) {
@@ -495,6 +639,13 @@ function validatePatreonMember(
   validateId(member.id, `${owner}.id`, errors);
   if (member.memberType !== 'patreon') {
     errors.push(`${owner}.memberType: must be 'patreon'`);
+  }
+  if (Object.hasOwn(member, 'premiumSortOrder')) {
+    validatePremiumSortOrder(
+      member.premiumSortOrder,
+      `${owner}.premiumSortOrder`,
+      errors
+    );
   }
   if (typeof member.catName !== 'string' ||
       member.catName.trim().length === 0 ||
@@ -726,6 +877,26 @@ function validateSchemas(root, errors) {
     if (schema.type !== 'object' || schema.additionalProperties !== false) {
       errors.push(`${schemaPath}: root must be a closed object schema`);
     }
+    const memberSchema = schema.$defs?.member;
+    if (schemaPath === 'schemas/catverter-patreon-members-v1.schema.json') {
+      const premiumSortOrder = memberSchema?.properties?.premiumSortOrder;
+      if (!isObject(premiumSortOrder) ||
+          premiumSortOrder.type !== 'integer' ||
+          premiumSortOrder.minimum !== 0 ||
+          premiumSortOrder.maximum !== MAX_PREMIUM_SORT_ORDER) {
+        errors.push(
+          `${schemaPath}: premiumSortOrder must be an optional integer in ` +
+          `range 0..${MAX_PREMIUM_SORT_ORDER}`
+        );
+      }
+    }
+    if (schemaPath === 'schemas/catverter-standard-committee-v1.schema.json' &&
+        (memberSchema?.additionalProperties !== false ||
+         Object.hasOwn(memberSchema?.properties ?? {}, 'premiumSortOrder'))) {
+      errors.push(
+        `${schemaPath}: standard members must reject premiumSortOrder`
+      );
+    }
   }
 }
 
@@ -823,17 +994,24 @@ function validateNoStaleFiles(root, references, errors) {
 }
 
 function validateTemplates(root, errors) {
-  const templatePath = 'templates/patreon-member.template.json';
-  const template = readJson(root, templatePath, errors);
-  if (template !== null) {
-    validatePatreonMember(
-      root,
-      template.value,
-      templatePath,
-      errors,
-      { assets: new Set(), permissions: new Set() },
-      false
-    );
+  const templatePaths = [
+    'templates/patreon-member.template.json',
+    'templates/premium-patreon-member.template.json'
+  ];
+  for (const templatePath of templatePaths) {
+    const template = readJson(root, templatePath, errors, {
+      canonicalIntegerProperties: ['premiumSortOrder']
+    });
+    if (template !== null) {
+      validatePatreonMember(
+        root,
+        template.value,
+        templatePath,
+        errors,
+        { assets: new Set(), permissions: new Set() },
+        false
+      );
+    }
   }
   const permissionTemplate = readUtf8(
     root,
@@ -880,7 +1058,9 @@ export function validateRepository(root) {
   }
 
   const standardFile = readJson(absoluteRoot, STANDARD_PATH, errors);
-  const patreonFile = readJson(absoluteRoot, PATREON_PATH, errors);
+  const patreonFile = readJson(absoluteRoot, PATREON_PATH, errors, {
+    canonicalIntegerProperties: ['premiumSortOrder']
+  });
   const standardIds = standardFile === null
     ? []
     : validateStandardCatalog(

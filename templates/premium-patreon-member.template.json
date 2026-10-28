@@ -1,0 +1,13 @@
+{
+  "id": "replace-with-stable-id",
+  "memberType": "patreon",
+  "premiumSortOrder": 0,
+  "catName": "Cat name",
+  "position": {
+    "en": "Committee position"
+  },
+  "description": {
+    "en": "Optional short description, up to 280 characters."
+  },
+  "photo": null
+}
